@@ -23,7 +23,6 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@Ignore("broken for now")
 public class T8ApprovalsTest {
 
     @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("test");
@@ -33,38 +32,15 @@ public class T8ApprovalsTest {
         transcript = approver.transcript();
     }
 
-//    @Test public void lookup() throws IOException {
-//        List<String> words = readWords(new File("words.small.txt"));
-//
-//        given("a word list", words);
-//        when("I enter", "a");
-//        then("the search is made for ", lookupFor(words, "a"));
-//    }
+    @Test public void suggestions() throws IOException {
+        File file = new File("wordlist.txt");
+        T8 t8 = new T8(readWords(file));
 
-
-    private String inputFor(String word) {
-        StringBuilder result = new StringBuilder(word.length());
-        for (char c : word.toCharArray()) {
-            result.append(inputCharFor(c));
-        }
-        return result.toString();
+        given("the words in ", file);
+        when("I enter", "2");
+        then("the search is made for ", t8.suggestionsFor("2"));
     }
 
-    private ImmutableList<String> stemsFor(String word) {
-        List<String> result = Lists.newArrayList();
-        for (int i = 1; i <= word.length(); i++) {
-            result.add(word.substring(0, i));
-        }
-        return ImmutableList.copyOf(result);
-    }
-
-    private char inputCharFor(char c) {
-        switch (c) {
-            case 'a':case 'b':case 'c' : return 'a';
-            case 'd':case 'e':case 'f' : return 'd';
-        }
-        return ' ';
-    }
 
     private Transcript given(String given, Object thing) throws IOException {
         return term("given", given, thing);
@@ -79,27 +55,12 @@ public class T8ApprovalsTest {
     }
 
     private Transcript term(String term, String description, Object thing) {
-        transcript.append(term + " " + description).appendFormatted(thing).endl();
+        transcript.append(term + " " + description + " ").appendFormatted(thing).endl();
         return transcript;
-    }
-
-    private Map<String, Integer> generateLookup(List<String> words) {
-        Map<String, Integer> result = Maps.newHashMap();
-
-        result.put("a", 3);
-        result.put("b", 4);
-        for (String word : words) {
-            for (char c : word.toCharArray()) {
-
-            }
-
-        }
-        return result;
     }
 
     public List<String> readWords(File file) throws IOException {
         return Files.readLines(file, Charset.defaultCharset());
     }
-
 
 }

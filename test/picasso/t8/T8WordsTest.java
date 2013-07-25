@@ -1,35 +1,44 @@
 package picasso.t8;
 
+import com.sun.tools.javac.util.Pair;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.Collection;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static picasso.t8.T8.Root;
 
 public class T8WordsTest {
 
-    @Test public void singleEntry() {
-        T8 t8 = new T8(asList("a"));
-        assertEquals(asList(), t8.suggestionsFor("1"));
-        assertEquals(asList("a"), t8.suggestionsFor("2"));
+    private final T8 t8 = new T8(asList("a", "aa", "ab", "ac", "ad", "aab", "aad", "d"));
+
+    @Test public void suggestionsFor() {
+        checkSuggestions("1", new String[0]);
+        checkSuggestions("3", "d");
+        checkSuggestions("2", "a", "aa", "ab", "ac", "ad", "aab", "aad");
+        checkSuggestions("22", "aa", "ab", "ac", "aab", "aad");
+        checkSuggestions("222", "aab");
     }
 
-    @Test public void singleCharacterEntries() {
-        T8 t8 = new T8(asList("a", "b", "d"));
-        assertEquals(asList(), t8.suggestionsFor("1"));
-        assertEquals(asList("a", "b"), t8.suggestionsFor("2"));
-        assertEquals(asList("d"), t8.suggestionsFor("3"));
+    @Test public void rootsFor() {
+        checkRoots("1", new Root[0]);
+        checkRoots("3", root("d", 1));
+        checkRoots("2", root("a", 7));
+        checkRoots("22", root("ac", 1), root("aa", 3), root("ab", 1));
     }
 
-    @Test public void multiCharacterEntries() {
-        T8 t8 = new T8(asList("a", "aa", "ad", "aab", "aad", "d"));
-        assertEquals(asList(), t8.suggestionsFor("1"));
-        assertEquals(asList("a", "aa", "ad", "aab", "aad"), t8.suggestionsFor("2"));
-        assertEquals(asList("aa", "aab", "aad"), t8.suggestionsFor("22"));
-        assertEquals(asList("aab"), t8.suggestionsFor("222"));
-        assertEquals(asList("d"), t8.suggestionsFor("3"));
+    private Root root(String root, int frequency) {
+        return new Root(root, frequency);
+    }
+
+    private void checkRoots(String input, Root... roots) {
+        assertEquals(asList(roots), t8.rootsFor(input));
+
+    }
+
+    private void checkSuggestions(String input, String... suggestions) {
+        assertEquals(asList(suggestions), t8.suggestionsFor(input));
     }
 
 }

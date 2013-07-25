@@ -12,6 +12,45 @@ public class T8 {
     private final Map<Character, Character> charToInput = charToInput();
     private final Multimap<String, String> inputToWords = ArrayListMultimap.create();
 
+
+    public static class Root {
+        public final String root;
+        public final int frequency;
+
+        public Root(String key, int frequency) {
+            this.root = key;
+            this.frequency = frequency;
+        }
+
+        @Override
+        public String toString() {
+            return "Root{" +
+                    "root='" + root + '\'' +
+                    ", frequency=" + frequency +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Root root1 = (Root) o;
+
+            if (frequency != root1.frequency) return false;
+            if (!root.equals(root1.root)) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = root.hashCode();
+            result = 31 * result + frequency;
+            return result;
+        }
+    }
+
     public T8(List<String> words) {
         for (String word : words) {
             for (String stem : inputStemsFor(word)) {
@@ -20,13 +59,27 @@ public class T8 {
         }
     }
 
+    public Collection<Root> rootsFor(String input) {
+        Multimap<String, String> intermediate = ArrayListMultimap.create();
+        for (String suggestion : suggestionsFor(input)) {
+            String rooted = suggestion.substring(0, input.length());
+            intermediate.put(rooted, rooted);
+        }
+
+        List<Root> result = Lists.newArrayList();
+        for (Map.Entry<String, Collection<String>> entry : intermediate.asMap().entrySet()) {
+            result.add(new Root(entry.getKey(), entry.getValue().size()));
+        }
+        return result;
+    }
 
     public Collection<String> suggestionsFor(String input) {
         return inputToWords.get(input);
     }
 
     public char inputCharFor(char c) {
-        return charToInput.get(c);
+        Character result = charToInput.get(c);
+        return result == null ? '1' : result;
     }
 
     protected String inputFor(String chars) {
