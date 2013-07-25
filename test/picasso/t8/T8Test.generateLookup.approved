@@ -1,6 +1,0 @@
-given a wordlist
-["a","ant","apple","bee","banana","do","dog"]
-when I enter
-a
-then the search is made for 
-["a","b"]
