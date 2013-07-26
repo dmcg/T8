@@ -1,13 +1,9 @@
 package picasso.t8;
 
-import com.sun.tools.javac.util.Pair;
 import org.junit.Test;
-
-import java.util.Collection;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
-import static picasso.t8.T8.Root;
 
 public class T8WordsTest {
 

@@ -10,44 +10,6 @@ public class T8 {
     private final Multimap<String, String> inputToWords = ArrayListMultimap.create();
 
 
-    public static class Root {
-        public final String root;
-        public final int frequency;
-
-        public Root(String key, int frequency) {
-            this.root = key;
-            this.frequency = frequency;
-        }
-
-        @Override
-        public String toString() {
-            return "Root{" +
-                    "root='" + root + '\'' +
-                    ", frequency=" + frequency +
-                    '}';
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Root root1 = (Root) o;
-
-            if (frequency != root1.frequency) return false;
-            if (!root.equals(root1.root)) return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = root.hashCode();
-            result = 31 * result + frequency;
-            return result;
-        }
-    }
-
     public T8(List<String> words) {
         for (String word : words) {
             for (String stem : inputStemsFor(word)) {
@@ -67,13 +29,7 @@ public class T8 {
         for (Map.Entry<String, Collection<String>> entry : intermediate.asMap().entrySet()) {
             result.add(new Root(entry.getKey(), entry.getValue().size()));
         }
-        Collections.sort(result, new Comparator<Root>() {
-            @Override
-            public int compare(Root o1, Root o2) {
-                int diff = o2.frequency - o1.frequency;
-                return diff == 0 ? o1.root.compareTo(o2.root) : diff;
-            }
-        });
+        Collections.sort(result);
         return result;
     }
 
