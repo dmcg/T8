@@ -2,10 +2,7 @@ package picasso.t8;
 
 import com.google.common.collect.*;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class T8 {
 
@@ -70,6 +67,13 @@ public class T8 {
         for (Map.Entry<String, Collection<String>> entry : intermediate.asMap().entrySet()) {
             result.add(new Root(entry.getKey(), entry.getValue().size()));
         }
+        Collections.sort(result, new Comparator<Root>() {
+            @Override
+            public int compare(Root o1, Root o2) {
+                int diff = o2.frequency - o1.frequency;
+                return diff == 0 ? o1.root.compareTo(o2.root) : diff;
+            }
+        });
         return result;
     }
 

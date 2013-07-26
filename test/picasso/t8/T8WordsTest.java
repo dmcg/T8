@@ -25,7 +25,7 @@ public class T8WordsTest {
         checkRoots("1", new Root[0]);
         checkRoots("3", root("d", 1));
         checkRoots("2", root("a", 7));
-        checkRoots("22", root("ac", 1), root("aa", 3), root("ab", 1));
+        checkRoots("22", root("aa", 3), root("ab", 1), root("ac", 1));
     }
 
     private Root root(String root, int frequency) {
