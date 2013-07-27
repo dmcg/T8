@@ -5,6 +5,8 @@ import com.google.common.io.Files;
 import org.junit.Rule;
 import org.junit.Test;
 import org.rococoa.okeydoke.Transcript;
+import org.rococoa.okeydoke.bdd.Pickle;
+import org.rococoa.okeydoke.bdd.Scenario;
 import org.rococoa.okeydoke.junit.ApprovalsRule;
 
 import java.io.File;
@@ -23,8 +25,9 @@ public class T8ApprovalsTest {
     private final T8 t8 = new T8(readWords(file));
 
     @Test public void suggestions() throws IOException {
-        given("the words in ", file);
-        whenThen("I enter", "duck", "then the suggestions are", new Function<String, Object>() {
+        Scenario scenario = new Pickle(approver.transcript()).scenario("Suggestions");
+        scenario.given("the words in", file);
+        whenThen(scenario, "I enter", "duck", "the suggestions are", new Function<String, Object>() {
             public Object apply(String input) {
                 return t8.suggestionsFor(input);
             }
@@ -32,38 +35,19 @@ public class T8ApprovalsTest {
     }
 
     @Test public void roots() throws IOException {
-        given("the words in ", file);
-        whenThen("I enter", "duck", "then the suggestions are", new Function<String, Object>() {
+        Scenario scenario = new Pickle(approver.transcript()).scenario("Roots");
+        scenario.given("the words in", file);
+        whenThen(scenario, "I enter", "duck", "the roots are", new Function<String, Object>() {
             public Object apply(String input) {
                 return t8.rootsFor(input);
             }
         });
     }
 
-    private void whenThen(String when, String word, String then, Function<String, Object> f) throws IOException {
-        when(when, word);
+    private void whenThen(Scenario scenario, String when, String word, String then, Function<String, Object> f) throws IOException {
+        scenario.when(when, word);
         String input = t8.inputFor(word);
-        then(then, f.apply(input));
-    }
-
-    private void given(String given, Object thing) throws IOException {
-        term("given", given, thing);
-    }
-
-    private void when(String when, Object thing) throws IOException {
-        term("when", when, thing);
-    }
-
-    private void then(String then, Object thing) throws IOException {
-        term("then", then, thing);
-    }
-
-    private void term(String term, String description, Object thing) throws IOException {
-        transcript().append(term + " " + description + " ").appendFormatted(thing).endl();
-    }
-
-    private Transcript transcript() throws IOException {
-        return approver.transcript();
+        scenario.then(then, f.apply(input));
     }
 
     public List<String> readWords(File file) {
