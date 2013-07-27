@@ -1,0 +1,3 @@
+given the words in  wordlist.txt
+when I enter duck
+then then the suggestions are ["Root{root='duck', frequency=8}","Root{root='fuck', frequency=4}"]
