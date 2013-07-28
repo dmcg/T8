@@ -1,4 +1,4 @@
 Scenario: Roots
-Given the words in wordlist.txt
-When I enter duck
-Then the roots are ["Root{root='duck', frequency=8}","Root{root='fuck', frequency=4}"]
+    Given the words in wordlist.txt
+    When I enter duck
+    Then the roots are ["Root{root='duck', frequency=8}","Root{root='fuck', frequency=4}"]
