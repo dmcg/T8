@@ -37,9 +37,17 @@ public class T8ApprovalsTest {
         scenario.given("the words in", file);
         whenThen(scenario, "I enter", "duck", "the roots are", new Function<String, Iterable<?>>() {
             public Iterable<?> apply(String input) {
-                return t8.rootsFor(input);
+                return columnise(t8.rootsFor(input));
             }
         });
+    }
+
+    private Iterable<?> columnise(final List<Root> roots) {
+        return new WrappingIterable<Object, Root>(roots) {
+            @Override protected Object map(Root thing) {
+                return new Object[] {thing.root, thing.frequency};
+            }
+        };
     }
 
     private void whenThen(Scenario scenario, String when, String word, String then, Function<String, Iterable<?>> f) throws IOException {
