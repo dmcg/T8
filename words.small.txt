@@ -1,7 +1,0 @@
-a
-ant
-apple
-bee
-banana
-do
-dog
