@@ -18,7 +18,7 @@ public class T8 {
         }
     }
 
-    public Collection<Root> rootsFor(String input) {
+    public List<Root> rootsFor(String input) {
         Multimap<String, String> intermediate = ArrayListMultimap.create();
         for (String suggestion : suggestionsFor(input)) {
             String rooted = suggestion.substring(0, input.length());
@@ -42,7 +42,7 @@ public class T8 {
         return result == null ? '1' : result;
     }
 
-    protected String inputFor(String chars) {
+    public String inputFor(String chars) {
         StringBuilder result = new StringBuilder(chars.length());
         for (char c : chars.toCharArray()) {
             result.append(inputCharFor(c));
