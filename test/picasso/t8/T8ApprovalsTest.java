@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import org.junit.Rule;
 import org.junit.Test;
 import org.rococoa.okeydoke.formatters.TableFormatter;
+import org.rococoa.okeydoke.internal.MappingIterable;
 import org.rococoa.okeydoke.junit.ApprovalsRule;
 import org.rococoa.okeydoke.pickle.Pickle;
 import org.rococoa.okeydoke.pickle.Scenario;
@@ -43,7 +44,7 @@ public class T8ApprovalsTest {
     }
 
     private Iterable<?> columnise(final List<Root> roots) {
-        return new WrappingIterable<Object, Root>(roots) {
+        return new MappingIterable<Object, Root>(roots) {
             @Override protected Object map(Root thing) {
                 return new Object[] {thing.root, thing.frequency};
             }
