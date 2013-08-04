@@ -1,6 +1,0 @@
-Scenario: Roots
-    Given the words in wordlist.txt
-    When I enter duck
-    Then the roots are
-    |duck|8|
-    |fuck|4|

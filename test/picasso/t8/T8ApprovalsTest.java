@@ -1,32 +1,33 @@
 package picasso.t8;
 
 import com.google.common.base.Function;
+import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.rococoa.okeydoke.formatters.TableFormatter;
 import org.rococoa.okeydoke.internal.MappingIterable;
-import org.rococoa.okeydoke.junit.ApprovalsRule;
-import org.rococoa.okeydoke.pickle.Pickle;
-import org.rococoa.okeydoke.pickle.Scenario;
+import org.rococoa.okeydoke.pickle.Feature;
+import org.rococoa.okeydoke.pickle.FeatureRule;
+import org.rococoa.okeydoke.pickle.ScenarioRule;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.rococoa.okeydoke.junit.ApprovalsRule.fileSystemRule;
 
+@Feature("T8")
 public class T8ApprovalsTest {
 
-    @Rule public final ApprovalsRule approver = ApprovalsRule.fileSystemRule("test");
+    @ClassRule public static final FeatureRule feature = new FeatureRule(fileSystemRule("test"));
+    @Rule public final ScenarioRule scenario = feature.scenarioRule();
+
     private final File file = new File("wordlist.txt");
     private final T8 t8 = new T8(FileReader.readWords(file));
 
     @Test public void suggestions() throws IOException {
-        Scenario scenario = new Pickle(approver.transcript()).scenario("Suggestions");
         scenario.given("the words in", file);
-        whenThen(scenario, "I enter", "duck", "the suggestions are", new Function<String, Iterable<?>>() {
+        whenThen("I enter", "duck", "the suggestions are", new Function<String, Iterable<?>>() {
             public Iterable<String> apply(String input) {
                 return t8.suggestionsFor(input);
             }
@@ -34,9 +35,8 @@ public class T8ApprovalsTest {
     }
 
     @Test public void roots() throws IOException {
-        Scenario scenario = new Pickle(approver.transcript()).scenario("Roots");
         scenario.given("the words in", file);
-        whenThen(scenario, "I enter", "duck", "the roots are", new Function<String, Iterable<?>>() {
+        whenThen("I enter", "duck", "the roots are", new Function<String, Iterable<?>>() {
             public Iterable<?> apply(String input) {
                 return columnise(t8.rootsFor(input));
             }
@@ -51,7 +51,7 @@ public class T8ApprovalsTest {
         };
     }
 
-    private void whenThen(Scenario scenario, String when, String word, String then, Function<String, Iterable<?>> f) throws IOException {
+    private void whenThen(String when, String word, String then, Function<String, Iterable<?>> f) throws IOException {
         scenario.when(when, word);
         String input = t8.inputFor(word);
         scenario.then(then);
