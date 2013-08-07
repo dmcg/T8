@@ -1,6 +1,9 @@
 package picasso.t8;
 
 import com.google.common.base.Function;
+import org.jmock.api.Invocation;
+import org.jmock.api.Invokable;
+import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -54,8 +57,6 @@ public class T8ApprovalsTest {
     private void whenThen(String when, String word, String then, Function<String, Iterable<?>> f) throws IOException {
         scenario.when(when, word);
         String input = t8.inputFor(word);
-        scenario.then(then);
-        scenario.appendFormatted(f.apply(input), TableFormatter.instance());
+        scenario.then(then + "\n", TableFormatter.instance(), f.apply(input));
     }
-
 }
