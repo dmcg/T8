@@ -1,19 +1,14 @@
 package picasso.t8;
 
-import com.google.common.base.Function;
-import org.jmock.api.Invocation;
-import org.jmock.api.Invokable;
-import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.rococoa.okeydoke.Formatter;
-import org.rococoa.okeydoke.formatters.DefaultInvocationFormatter;
+import org.rococoa.okeydoke.Formatters;
 import org.rococoa.okeydoke.formatters.TableFormatter;
 import org.rococoa.okeydoke.internal.Fred;
 import org.rococoa.okeydoke.internal.Mapper;
-import org.rococoa.okeydoke.internal.MappingIterable;
 import org.rococoa.okeydoke.pickle.Feature;
 import org.rococoa.okeydoke.pickle.FeatureRule;
 import org.rococoa.okeydoke.pickle.ScenarioRule;
@@ -22,7 +17,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.List;
 
 import static org.rococoa.okeydoke.junit.ApprovalsRule.fileSystemRule;
 
@@ -44,7 +38,7 @@ public class T8ApprovalsTest {
         String input = t8.inputFor("duck");
         scenario.given("the input for", "duck", "is", input);
         scenario.when("I enter", input);
-        thenWith(t8, "the suggestions are\n", TableFormatter.instance()).suggestionsFor(input);
+        thenWith(t8, "the suggestions are\n", Formatters.table()).suggestionsFor(input);
     }
 
     @Test public void roots() throws IOException {

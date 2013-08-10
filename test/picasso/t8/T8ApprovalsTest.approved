@@ -5,7 +5,8 @@ Feature: T8
     
     Scenario: suggestions
         Given the words in wordlist.txt
-        When I enter duck
+        Given the input for duck is 3825
+        When I enter 3825
         Then the suggestions are
         |duck     |
         |duckbill |
@@ -22,7 +23,10 @@ Feature: T8
     
     Scenario: roots
         Given the words in wordlist.txt
-        When I enter duck
-        Then the roots are
-        |duck|8|
-        |fuck|4|
+        Given the input for duck is 3825
+        When I enter 3825
+        Then the suggestions are
+        |root|freq|
+        |----|----|
+        |duck|8   |
+        |fuck|4   |
